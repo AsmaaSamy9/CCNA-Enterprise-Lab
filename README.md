@@ -129,5 +129,4 @@ If you like this project:
 * ⭐ Star this repository
 * 🧠 Keep studying, simulating, and breaking things (then fixing them)
   
-```
-
+---
