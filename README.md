@@ -84,7 +84,6 @@ Branch2 LAN | 172.16.3.0/24 |
 |---|---|
 HQ ↔ Branch Connectivity | ✅ |
 Inter-VLAN Routing | ✅ |
-Branch DHCP via HQ | ✅ |
 GRE + IPSec Tunnel Encryption | ✅ |
 OSPF Neighbor Relationships | ✅ |
 
@@ -131,3 +130,4 @@ If you like this project:
 * 🧠 Keep studying, simulating, and breaking things (then fixing them)
   
 ```
+
