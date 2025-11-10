@@ -1,33 +1,44 @@
+
 # Secure Multi-Site Enterprise Network Lab (HQ + Branches)
 
-This project simulates a production-grade enterprise network connecting one Headquarters and two Branch sites using secure encrypted WAN technologies.
+This project simulates a production-grade enterprise network connecting one Headquarters and two Branch sites using secure encrypted WAN technologies (GRE over IPSec with ISAKMP).
 
-The design follows real-world enterprise standards including routing, switching, security, and centralized services delivery.
+The lab mirrors real enterprise design principles including routing, switching, security, and centralized services delivery.
 
 ---
 
 ## 🎯 Objectives
 
 - Build scalable & secure enterprise WAN
-- Implement multi-layer campus switching model (Core–Distribution–Access)
-- Enforce encrypted site-to-site VPN
-- Centralize services at HQ (DHCP, routing, NAT)
-- Prepare for future SD-WAN / DMVPN upgrade
-- Perform enterprise-grade testing & troubleshooting
+- Implement multi-layer switching (Core–Distribution–Access)
+- Establish secure site-to-site GRE tunnels over IPSec
+- Centralize key services at HQ (DHCP, routing, NAT)
+- Validate routing, tunneling, and LAN services end-to-end
 
 ---
 
 ## 🏗️ Network Topology
 
 **Key Components**
-- 1× HQ Site (Core, Distribution, Access)
+- 1× HQ Site (Core, Distribution, Access layers)
 - 2× Branch Sites
-- Encrypted WAN over Internet
+- GRE tunnels secured with IPSec (ISAKMP/IKE)
 - VLAN-segmented LAN design
 - LACP EtherChannel uplinks
-- NAT & DHCP centralized at HQ
+- HQ acts as DHCP & NAT gateway
 
 > Designed & deployed in **GNS3** using **Cisco IOS**
+
+---
+
+## 🌐 WAN & Tunnel IP Scheme
+
+| Site Link | Public IPs | Tunnel IPs |
+|---|---|---|
+HQ ↔ Branch1 | HQ: 203.0.13.1/30 <br> B1: 203.0.14.1/30 | HQ Tunnel: 10.0.0.1/30 <br> B1 Tunnel: 10.0.0.2/30 |
+HQ ↔ Branch2 | HQ: 203.0.13.1/30 <br> B2: 203.0.15.1/30 | HQ Tunnel: 20.0.0.1/30 <br> B2 Tunnel: 20.0.0.2/30 |
+
+> Each branch uses a dedicated GRE tunnel to HQ, protected with IPSec.
 
 ---
 
@@ -36,15 +47,15 @@ The design follows real-world enterprise standards including routing, switching,
 | Category | Technology |
 |---|---|
 Routing | OSPF Multi-Area (Area 0 / Area 10) |
-VPN | GRE over IPSec (Phase-1 complete) |
+VPN | GRE over IPSec (ISAKMP / IKE) |
 Switching | VLANs, VTPv2, LACP / EtherChannel |
-Security | IPSec, ACLs, NAT-Exempt |
+Security | IPSec, ACLs, NAT Exemption |
 Services | DHCP, NAT, Inter-VLAN Routing |
-Platform | GNS3, Cisco IOS |
+Platform | GNS3 + Cisco IOS |
 
 ---
 
-## 📌 IP & VLAN Structure
+## 📌 IP & VLAN Structure (LAN)
 
 | Segment | Subnet |
 |---|---|
@@ -55,31 +66,29 @@ HQ VLAN50 – Servers | 192.168.50.0/24 |
 HQ Native VLAN | 999 |
 Branch1 LAN | 172.16.2.0/24 |
 Branch2 LAN | 172.16.3.0/24 |
-Future DMVPN | 172.31.0.0/24 |
 
 ---
 
-## 🔐 Security Implementation
+## 🔐 Security Highlights
 
-- IPSec encryption for GRE tunnels
-- NAT exemption for VPN traffic
-- Native VLAN changed from default
-- SNMP monitoring enabled
+- GRE tunnels encrypted with IPSec
+- ISAKMP (IKE) for secure negotiation
+- NAT exemption for tunnel subnets
+- VLAN security hardening (non-default native VLAN)
 
 ---
 
 ## 🧪 Validation & Testing
 
-| Test | Status |
+| Test | Result |
 |---|---|
 HQ ↔ Branch Connectivity | ✅ |
 Inter-VLAN Routing | ✅ |
 Branch DHCP via HQ | ✅ |
-VPN Encryption | ✅ |
-SNMP Reachability | ✅ |
-OSPF Neighbors | ✅ |
+GRE + IPSec Tunnel Encryption | ✅ |
+OSPF Neighbor Relationships | ✅ |
 
-### CLI Verification Commands
+### Key Verification Commands
 
 ```bash
 show ip ospf neighbor
@@ -88,31 +97,21 @@ show interfaces trunk
 show etherchannel summary
 show crypto isakmp sa
 show crypto ipsec sa
-show dmvpn   # future upgrade
 ````
 
 ---
 
-## 🚀 Future Enhancements
-
-* DMVPN Phase-1/2/3 upgrade
-* Dual-hub redundancy (HQ + DR)
-* Syslog + NMS (LibreNMS / Grafana)
-* AAA / TACACS+ / RADIUS
-* Firewall + IDS/IPS integration (ASA / FortiGate)
-
----
-
-## 📂 Repo Structure
+## 📂 Repository Structure
 
 ```
 CCNA-Enterprise-Lab/
  ├── Diagrams/
- ├── Configs/   
+ ├── Configs/
  ├── README.md
  └── Results/
      ├── ospf-neighbors.png
      └── ipsec-status.png
+```
 
 ---
 
@@ -120,13 +119,15 @@ CCNA-Enterprise-Lab/
 
 **Asmaa — Presales & Network Engineer**
 Building secure, scalable enterprise networks & modern IT infrastructure.
-Focused on Cisco, Security, Cloud & SD-WAN evolution.
+Focused on Cisco, Security, Cloud & advanced routing.
 
 ---
 
 ## ⭐ Support
 
-If you like this project, please:
+If you like this project:
 
 * ⭐ Star this repository
-* 🧠 Keep studying & building labs!
+* 🧠 Keep studying, simulating, and breaking things (then fixing them)
+  
+```
